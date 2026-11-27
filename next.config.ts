@@ -3,6 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   experimental: {
     agentFeedback: true,
+    serverActions: { bodySizeLimit: "20mb" },
   },
   turbopack: {
     rules: {
