@@ -49,7 +49,6 @@ export type Database = {
       app_settings: {
         Row: {
           legacy_id: string | null;
-          stations: string[];
           id: string;
           created_at: string;
           current_version: string | null;
@@ -61,7 +60,6 @@ export type Database = {
         };
         Insert: {
           legacy_id?: string | null;
-          stations?: string[];
           id?: string;
           created_at?: string;
           current_version?: string | null;
@@ -73,7 +71,6 @@ export type Database = {
         };
         Update: {
           legacy_id?: string | null;
-          stations?: string[];
           id?: string;
           created_at?: string;
           current_version?: string | null;
@@ -1608,9 +1605,49 @@ export type Database = {
         Relationships: [
         ];
       };
+      stations: {
+        Row: {
+          id: string;
+          name: string;
+          phase: Database["public"]["Enums"]["order_phase"] | null;
+          sequence_order: number;
+          is_active: boolean | null;
+          created_at: string;
+          created_by_id: string | null;
+        };
+        Insert: {
+          id?: string;
+          name: string;
+          phase?: Database["public"]["Enums"]["order_phase"] | null;
+          sequence_order?: number;
+          is_active?: boolean | null;
+          created_at?: string;
+          created_by_id?: string | null;
+        };
+        Update: {
+          id?: string;
+          name?: string;
+          phase?: Database["public"]["Enums"]["order_phase"] | null;
+          sequence_order?: number;
+          is_active?: boolean | null;
+          created_at?: string;
+          created_by_id?: string | null;
+        };
+        Relationships: [
+          { foreignKeyName: "stations_created_by_id_fkey"; columns: ["created_by_id"]; isOneToOne: false; referencedRelation: "profiles"; referencedColumns: ["id"] },
+        ];
+      };
     };
     Views: { [_ in never]: never };
-    Functions: { [_ in never]: never };
+    Functions: {
+      rename_department: { Args: { p_old: string; p_new: string }; Returns: undefined };
+      rename_station: { Args: { p_old: string; p_new: string }; Returns: undefined };
+      release_app_version: {
+        Args: { p_version: string; p_title: string; p_notes: string; p_target_roles: Database["public"]["Enums"]["user_role"][]; p_released_by: string };
+        Returns: string;
+      };
+      system_languages: { Args: Record<string, never>; Returns: string[] };
+    };
     Enums: {
       user_role: "supervisor" | "employee" | "doctor" | "distributor";
       order_status: "awaiting_terms" | "processing" | "finished" | "cancelled";
